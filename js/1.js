@@ -1,4 +1,3 @@
-
 let offers = [
 	{
 		job: "Back-end development",
@@ -57,30 +56,12 @@ let offers = [
 		logo_company: "sber.png"
 	} 
 ];
-
-
 let setting = {
 	offersLimitPage: 3,
-	activePage: 1
-
+	activePage: 1,
+	lastActivePage: 1,
+	maxNumberPage: 1
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function renderOffers(offersParm = offers){
 	let listOffers = document.querySelector(".list_offers");
 	listOffers.innerHTML = "";
@@ -102,11 +83,10 @@ function renderOffers(offersParm = offers){
 											<p class="desc">${offer.descriprtion}</p>
 											<p class="location">${offer.location}</p>
 										</div>
-									</div>`
+									</div>`;
 		}
 	});
 	renderPagination(offersParm);
-	
 }
 function renderPagination(offer){
 	let wrapPag = document.querySelector(".wrap_pagination");
@@ -129,15 +109,33 @@ function renderPagination(offer){
 								</nav>`;
 	function rengerCounterPage(){
 		let pagesStr = "";
+		setting.maxNumberPage = Math.ceil(offer.length / setting.offersLimitPage);
 		for(let i = 0; i < Math.ceil(offer.length / setting.offersLimitPage); i++){
-			pagesStr += `<li class="page-item"> <a href="#2" class="page-link">${i+1}</a></li>`;
+			pagesStr += `<li class="page-item"> <a href="#" class="page-link numPage">${i+1}</a></li>`;
 		}
 		return pagesStr;
 	}
-	document.querySelectorAll(".pagination .page-link").forEach((el)=>{
+	let nextPage = document.querySelector(".pagination .next_page");
+	nextPage.addEventListener('click', ()=>{
+		if(setting.lastActivePage < setting.maxNumberPage){
+			setting.lastActivePage = setting.lastActivePage + 1;
+			setting.activePage = setting.lastActivePage;
+			renderOffers(offer);
+		}
+	});
+	let prePage = document.querySelector(".pagination .pre_page");
+	prePage.addEventListener('click', ()=>{
+		if(setting.lastActivePage > 1){
+			setting.lastActivePage = setting.lastActivePage - 1;
+			setting.activePage = setting.lastActivePage;
+			renderOffers(offer);
+		}
+	});
+	document.querySelectorAll(".pagination .numPage").forEach((el)=>{
 		el.addEventListener('click', (evt)=>{
 			evt.preventDefault();
-			setting.activePage = evt.target.innerHTML;
+			setting.lastActivePage = Number(evt.target.innerHTML);
+			setting.activePage = Number(evt.target.innerHTML);
 			renderOffers(offer);
 		});
 
@@ -148,7 +146,6 @@ function renderPagination(offer){
 		wrapPag.innerHTML="";
 	}
 }
-
 function renderFilters(){
 	let filters = document.querySelector(".filters");
 	let htmlLocation = locationFilters();
@@ -159,6 +156,8 @@ function renderFilters(){
 			renderOffers();
 		}
 		else{
+			setting.activePage = 1;
+			setting.lastActivePage = 1;
 			let resultOffers = [];
 			for(let offer of offers){
 				if(offer.location == e.target.value){
@@ -168,9 +167,7 @@ function renderFilters(){
 			renderOffers(resultOffers);
 		}
 	});
-
 }
-
 function locationFilters(){
 	let locations = new Set();
 	for(let offer of offers){
@@ -186,11 +183,6 @@ function locationFilters(){
 			${optionsStr}
 		</select>`;
 }
-
-
-
-
-
 //Offers' slider function for buttons
 (()=>{let prevEl = document.querySelector(".slider_nav .prev");
 	renderOffersInSlider(offers);
@@ -212,7 +204,8 @@ function locationFilters(){
 		}
 	}, 4000);
 
-	//--------------
+
+
 	nextEl.addEventListener('click', ()=>{
 		if(step_slider > countOffers*(-100)+countOffersWindow){
 			step_slider = step_slider - 100;
@@ -239,12 +232,6 @@ function renderOffersInSlider(offers){
 			</div>
 		</div>`;
 	});
-
 }
-
-
-
-
-
 renderFilters();
 renderOffers();

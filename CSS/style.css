@@ -9,7 +9,9 @@ aside{
 	box-sizing: border-box;
 	margin-right: 10px;
 	width: 30%;
+	min-height: 100vh;
 	align-self: flex-start;
+	background: #666;
 }
 .filters{
 	
@@ -19,6 +21,9 @@ aside{
 	padding: 10px;
 	border: 1px solid #000;
 	box-sizing: border-box;
+	min-height: 100vh;
+	position: relative;
+	background: #666;
 }
 .list_offers{
 	flex-grow: 1;
@@ -29,6 +34,7 @@ aside{
 	border: 1px solid #000;
 	box-sizing: border-box;
 	margin-bottom: 20px;
+	background: #fff;
 }
 .offer_info{
 	font-size: 16px;
@@ -63,6 +69,7 @@ select{
 	width: 100%;
 	height: 300px;
 	overflow: hidden;
+	background: #fff;
 
 }
 .slider .offer_list{
@@ -94,4 +101,12 @@ select{
 }
 .slider .offer_info .desc{
 	font-size: 12px;
+}
+.wrap_pagination{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	justify-content: center;
 }
